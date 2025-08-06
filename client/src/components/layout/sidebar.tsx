@@ -7,10 +7,7 @@ export default function Sidebar() {
   
   const navigation = [
     { name: "Dashboard", href: "/", icon: BarChart3, current: location === "/" },
-    { name: "My Bots", href: "/bots", icon: Bot, current: location.startsWith("/bot") },
-    { name: "Templates", href: "/templates", icon: Layers, current: location === "/templates" },
-    { name: "Integrations", href: "/integrations", icon: Plug, current: location === "/integrations" },
-    { name: "Settings", href: "/settings", icon: Settings, current: location === "/settings" },
+    { name: "My Bots", href: "/", icon: Bot, current: location.startsWith("/bot") },
   ];
 
   return (
