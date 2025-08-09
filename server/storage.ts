@@ -156,6 +156,10 @@ export class MemStorage implements IStorage {
     }
   }
 
+  async getTrainingDataById(id: string): Promise<TrainingData | undefined> {
+    return this.trainingData.get(id);
+  }
+
   // Conversation methods
   async getConversationsByBotId(botId: string): Promise<Conversation[]> {
     return Array.from(this.conversations.values()).filter(conv => conv.botId === botId);

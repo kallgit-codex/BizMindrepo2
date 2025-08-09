@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertBotSchema, insertTrainingDataSchema, insertIntegrationSchema } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { chatWithBot } from "./openai";
+import { extractRealFileContent } from "./fileProcessor";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -134,7 +135,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       setTimeout(async () => {
         try {
           // Extract text content from the file (simplified for now)
-          const content = await extractFileContent(filePath, fileName);
+          const content = await extractRealFileContent(filePath, fileName);
           
           // Store the processed content
           await storage.updateTrainingDataWithContent(trainingDataId, content);
@@ -252,6 +253,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating integration:", error);
       res.status(500).json({ error: "Failed to update integration" });
+    }
+  });
+
+  // Reprocess existing training data files to extract real content
+  app.post("/api/training-data/:id/reprocess", async (req, res) => {
+    try {
+      const trainingData = await storage.getTrainingDataById(req.params.id);
+      if (!trainingData) {
+        return res.status(404).json({ error: "Training data not found" });
+      }
+      
+      console.log(`Reprocessing file: ${trainingData.fileName}`);
+      const content = await extractRealFileContent(trainingData.fileUrl, trainingData.fileName);
+      
+      await storage.updateTrainingDataWithContent(trainingData.id, content);
+      await storage.updateTrainingDataProcessed(trainingData.id, true);
+      
+      res.json({ 
+        message: "File reprocessed successfully",
+        fileName: trainingData.fileName,
+        contentLength: content.length,
+        preview: content.substring(0, 200) + (content.length > 200 ? "..." : "")
+      });
+    } catch (error) {
+      console.error("Reprocess error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
+  // Debug endpoint to test file content extraction
+  app.get("/api/debug/extract/:trainingDataId", async (req, res) => {
+    try {
+      const trainingData = await storage.getTrainingDataById(req.params.trainingDataId);
+      if (!trainingData) {
+        return res.status(404).json({ error: "Training data not found" });
+      }
+      
+      console.log("Attempting to extract content from:", trainingData.fileUrl);
+      const content = await extractRealFileContent(trainingData.fileUrl, trainingData.fileName);
+      
+      res.json({ 
+        fileName: trainingData.fileName,
+        fileUrl: trainingData.fileUrl,
+        extractedContent: content 
+      });
+    } catch (error) {
+      console.error("Debug extraction error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Unknown error" });
     }
   });
 
