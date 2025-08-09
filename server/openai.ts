@@ -16,15 +16,15 @@ export async function chatWithBot(
       return "I'm sorry, but the OpenAI API key is not configured. Please contact the administrator to set up the API key.";
     }
 
-    // Build context from training data
-    const trainingContext = trainingData
-      .filter(data => data.processed)
-      .map(data => `Training file: ${data.fileName}`)
-      .join(", ");
+    // Build context from training data content
+    const processedData = trainingData.filter(data => data.processed && data.content);
+    const knowledgeBase = processedData
+      .map(data => `From ${data.fileName}:\n${data.content}`)
+      .join('\n\n---\n\n');
 
     const systemPrompt = `You are ${bot.name}, an AI assistant for small businesses. ${bot.description || ""} 
 
-${trainingContext ? `You have been trained on the following data: ${trainingContext}` : ""}
+${knowledgeBase ? `You have access to the following knowledge base:\n\n${knowledgeBase}\n\nUse this information to provide accurate responses.` : ""}
 
 You are designed to help with:
 - Answering frequently asked questions
@@ -61,14 +61,14 @@ export async function generateBotResponse(
       return "OpenAI API key not configured.";
     }
 
-    const trainingContext = trainingData
-      .filter(data => data.processed)
-      .map(data => `Training file: ${data.fileName}`)
-      .join(", ");
+    const processedData = trainingData.filter(data => data.processed && data.content);
+    const knowledgeBase = processedData
+      .map(data => `From ${data.fileName}:\n${data.content}`)
+      .join('\n\n---\n\n');
 
     const systemPrompt = `You are ${bot.name}, an AI assistant. ${bot.description || ""} 
 
-${trainingContext ? `Training data: ${trainingContext}` : ""}
+${knowledgeBase ? `Knowledge base:\n\n${knowledgeBase}\n\nUse this information to provide accurate responses.` : ""}
 
 Provide helpful, professional responses for small business customer service.`;
 

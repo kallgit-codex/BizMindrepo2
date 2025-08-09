@@ -26,6 +26,7 @@ export const trainingData = pgTable("training_data", {
   fileUrl: text("file_url").notNull(),
   fileSize: integer("file_size").notNull(),
   fileType: text("file_type").notNull(),
+  content: text("content"), // Processed file content
   processed: boolean("processed").default(false),
   uploadedAt: timestamp("uploaded_at").defaultNow(),
 });
@@ -59,6 +60,7 @@ export const insertBotSchema = createInsertSchema(bots).omit({
 
 export const insertTrainingDataSchema = createInsertSchema(trainingData).omit({
   id: true,
+  content: true,
   uploadedAt: true,
 });
 

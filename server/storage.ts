@@ -30,6 +30,7 @@ export interface IStorage {
   createTrainingData(data: InsertTrainingData): Promise<TrainingData>;
   deleteTrainingData(id: string): Promise<boolean>;
   updateTrainingDataProcessed(id: string, processed: boolean): Promise<void>;
+  updateTrainingDataWithContent(id: string, content: string): Promise<void>;
 
   // Conversations
   getConversationsByBotId(botId: string): Promise<Conversation[]>;
@@ -127,6 +128,7 @@ export class MemStorage implements IStorage {
       ...insertData,
       id,
       botId: insertData.botId || null,
+      content: null,
       processed: insertData.processed || false,
       uploadedAt: new Date() 
     };
@@ -142,6 +144,14 @@ export class MemStorage implements IStorage {
     const data = this.trainingData.get(id);
     if (data) {
       data.processed = processed;
+      this.trainingData.set(id, data);
+    }
+  }
+
+  async updateTrainingDataWithContent(id: string, content: string): Promise<void> {
+    const data = this.trainingData.get(id);
+    if (data) {
+      data.content = content;
       this.trainingData.set(id, data);
     }
   }

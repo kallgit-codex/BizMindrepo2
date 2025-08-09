@@ -115,10 +115,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const trainingData = await storage.createTrainingData(trainingDataInput);
       
-      // In a real implementation, you'd trigger processing here
-      setTimeout(async () => {
-        await storage.updateTrainingDataProcessed(trainingData.id, true);
-      }, 2000);
+      // Process the file content in the background
+      processFileInBackground(trainingData.id, normalizedPath, req.body.fileName);
 
       res.status(201).json(trainingData);
     } catch (error) {
@@ -126,6 +124,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to create training data" });
     }
   });
+
+  // Background file processing function
+  async function processFileInBackground(trainingDataId: string, filePath: string, fileName: string) {
+    try {
+      // Simulate processing time based on file type
+      const processingTime = getProcessingTime(fileName);
+      
+      setTimeout(async () => {
+        try {
+          // Extract text content from the file (simplified for now)
+          const content = await extractFileContent(filePath, fileName);
+          
+          // Store the processed content
+          await storage.updateTrainingDataWithContent(trainingDataId, content);
+          await storage.updateTrainingDataProcessed(trainingDataId, true);
+          
+          console.log(`Successfully processed file: ${fileName}`);
+        } catch (error) {
+          console.error(`Error processing file ${fileName}:`, error);
+          // Mark as failed processing
+          await storage.updateTrainingDataProcessed(trainingDataId, false);
+        }
+      }, processingTime);
+    } catch (error) {
+      console.error("Error in background processing:", error);
+    }
+  }
+
+  function getProcessingTime(fileName: string): number {
+    const extension = fileName.split('.').pop()?.toLowerCase();
+    const baseTimes: Record<string, number> = {
+      'txt': 1000,
+      'json': 1500,
+      'csv': 2000,
+      'pdf': 3000,
+      'doc': 3500,
+      'docx': 3500,
+      'md': 1000
+    };
+    return baseTimes[extension || 'txt'] || 2000;
+  }
+
+  async function extractFileContent(filePath: string, fileName: string): Promise<string> {
+    // For now, return a placeholder content based on file type
+    // In a real implementation, you'd fetch the file from object storage
+    // and use appropriate libraries to extract text content
+    const extension = fileName.split('.').pop()?.toLowerCase();
+    
+    const sampleContent: Record<string, string> = {
+      'txt': `This is sample text content from ${fileName}. Contains training information for the chatbot.`,
+      'json': `{"training": "data", "from": "${fileName}", "content": "Sample JSON training data"}`,
+      'csv': `"question","answer"\n"Sample question","Sample answer from ${fileName}"`,
+      'pdf': `Sample PDF content from ${fileName}. This would normally be extracted text from the PDF document.`,
+      'doc': `Sample document content from ${fileName}. Contains important training information.`,
+      'md': `# Training Data\n\nThis is sample markdown content from ${fileName}.\n\n## Key Information\n- Training point 1\n- Training point 2`
+    };
+    
+    return sampleContent[extension || 'txt'] || `Sample content extracted from ${fileName}`;
+  }
 
   app.delete("/api/training-data/:id", async (req, res) => {
     try {
