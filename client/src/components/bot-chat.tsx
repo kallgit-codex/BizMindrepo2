@@ -14,7 +14,7 @@ interface Message {
   timestamp: Date;
 }
 
-interface BotChatProps {
+interface BotChatProps message.timestamp
   isOpen: boolean;
   onClose: () => void;
   botId: string;
@@ -101,10 +101,10 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
         </div>
 
         {/* Chat Messages */}
-        <ScrollArea className="flex-1 p-4">
+  S    <ScrollArea className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-4">
             {messages.map((message, index) => (
-              <div key={index} className={`flex items-start space-x-3 ${message.role === "user" ? "justify-end" : ""}`}>
+              <div key=message..timestamp} className={`flex items-start space-x-3 ${message.role === "user" ? "justify-end" : ""}`}>
                 {message.role === "assistant" && (
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <BotIcon className="text-primary h-4 w-4" />
@@ -142,7 +142,7 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
                 <div className="flex-1">
                   <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-slate-200 dark:border-slate-700">
                     <div className="flex space-x-1">
-https://replit.com
+
                       <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
                       <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
                     </div>
