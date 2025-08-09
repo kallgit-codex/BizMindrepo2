@@ -113,7 +113,8 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
                 
                 <div className={`flex-1 ${message.role === "user" ? "text-right" : ""}`}>
                   <div className={`rounded-lg p-3 shadow-sm inline-block max-w-[80%] ${
-                    message.role === "user" 
+                    message.
+                role === "user" 
                       ? "bg-primary text-white" 
                       : "bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700"
                   }`}>
@@ -126,7 +127,8 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
 
                 {message.role === "user" && (
                   <div className="w-8 h-8 bg-slate-200 dark:bg-slate-600 rounded-full flex items-center justify-center">
-                    <User className="text-slate-600 dark:text-slate-300 h-4 w-4" />
+                    <User className="text-s
+                      late-600 dark:text-slate-300 h-4 w-4" />
                   </div>
                 )}
               </div>
@@ -140,7 +142,7 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
                 <div className="flex-1">
                   <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-slate-200 dark:border-slate-700">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+https://replit.com
                       <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
                       <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
                     </div>
@@ -174,3 +176,4 @@ export default function BotChat({ isOpen, onClose, botId, botName }: BotChatProp
     </Dialog>
   );
 }
+

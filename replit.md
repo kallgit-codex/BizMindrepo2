@@ -10,6 +10,16 @@ The platform features a React-based frontend with a modern UI built using shadcn
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+### August 9, 2025
+- **Fixed Critical File Processing Bug**: Resolved issue where training data was storing placeholder content instead of actual file content
+- **Implemented Real Content Extraction**: Created robust file processor that extracts actual text from PDFs and documents
+- **Added Reprocessing Capability**: Built endpoint to reprocess existing files with real content extraction
+- **Fixed Frontend Syntax Errors**: Resolved corrupted import statements in bot-detail.tsx
+- **Added GitHub Export Documentation**: Created comprehensive README.md and LICENSE files for repository export
+- **File Content Verification**: Training data now properly extracts and stores real file content, enabling bots to access uploaded instructions including secret codes
+
 ## System Architecture
 
 ### Frontend Architecture
@@ -61,6 +71,7 @@ Preferred communication style: Simple, everyday language.
 - **Production Build**: Separate client and server builds with esbuild
 - **Environment**: Replit-optimized with sidecar integration for cloud services
 - **Type Safety**: Full TypeScript coverage across frontend and backend
+- **GitHub Export Ready**: Comprehensive documentation and proper project structure for repository export
 
 ## External Dependencies
 
