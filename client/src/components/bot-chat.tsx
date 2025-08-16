@@ -19,11 +19,11 @@ interface Message {
   timestamp: Date;
 }
 
-/**
- * Props for the BotChat component. The dialog can be toggled open or closed, and
- * callers must provide the ID and name of the bot being chatted with. The `onClose`
- * callback is fired whenever the dialog requests to close.
- */
+  /**
+   * Props for the BotChat component. The dialog can be toggled open or closed, and
+   * callers must provide the ID and name of the bot being chatted with. The `onClose`
+   * callback is fired when the dialog requests to close.
+   */
 interface BotChatProps {
   isOpen: boolean;
   onClose: () => void;
