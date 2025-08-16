@@ -281,7 +281,7 @@ export default function BotDetail() {
                     <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Training Data</h3>
                     <ObjectUploader
                       maxNumberOfFiles={5}
-                      maxFileSize={10485760}
+                      maxFileSize={52428800}
                       onGetUploadParameters={handleFileUpload}
                       onComplete={handleUploadComplete}
                       buttonClassName="bg-primary text-white hover:bg-primary/90"
@@ -298,7 +298,7 @@ export default function BotDetail() {
                     </div>
                     <h4 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Upload Training Documents</h4>
                     <p className="text-slate-600 dark:text-slate-400 mb-4">Click "Add Data" button to upload files</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Supports: PDF, TXT, DOC, CSV, JSON</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Supports: PDF, TXT, DOC, CSV, JSON (up to 50MB each)</p>
                   </div>
 
                   {/* Existing Training Data */}
