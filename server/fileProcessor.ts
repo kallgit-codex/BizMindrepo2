@@ -1,5 +1,8 @@
 import { ObjectStorageService } from "./objectStorage";
-import pdfParse from "pdf-parse";
+// Import the library directly from its implementation file to avoid
+// running the debug code in the package's default entry point, which
+// tries to read a non-existent test PDF and crashes in production.
+import pdfParse from "pdf-parse/lib/pdf-parse.js";
 
 export async function extractRealFileContent(fileUrl: string, fileName: string): Promise<string> {
   try {
