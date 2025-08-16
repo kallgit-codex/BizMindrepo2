@@ -32,6 +32,24 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("@radix-ui")) {
+              return "radix";
+            }
+            if (id.includes("@uppy")) {
+              return "uppy";
+            }
+            if (id.includes("react")) {
+              return "react";
+            }
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1024,
   },
   server: {
     fs: {
