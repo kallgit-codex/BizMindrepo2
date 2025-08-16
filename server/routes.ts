@@ -167,44 +167,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return baseTimes[extension || 'txt'] || 2000;
   }
 
-  async function extractFileContent(filePath: string, fileName: string): Promise<string> {
-    try {
-      // Fetch the actual file from object storage
-      const objectStorageService = new ObjectStorageService();
-      const objectFile = await objectStorageService.getObjectEntityFile(filePath);
-      
-      // Download file content as buffer
-      const [buffer] = await objectFile.download();
-      const content = buffer.toString('utf-8');
-      
-      const extension = fileName.split('.').pop()?.toLowerCase();
-      
-      // For text-based files, return content directly
-      if (['txt', 'md', 'csv', 'json'].includes(extension || '')) {
-        return content;
-      }
-      
-      // For PDFs and other binary files, we'll need proper extraction
-      // For now, check if content is readable text
-      if (content.length > 0 && /^[\x20-\x7E\s]*$/.test(content.substring(0, 1000))) {
-        return content;
-      }
-      
-      // If binary content, extract what we can
-      const readableText = content.replace(/[^\x20-\x7E\s]/g, ' ').replace(/\s+/g, ' ').trim();
-      if (readableText.length > 50) {
-        return readableText;
-      }
-      
-      // Fallback if no readable content found
-      return `Content extracted from ${fileName}. File appears to be binary format requiring specialized extraction.`;
-      
-    } catch (error) {
-      console.error(`Error extracting content from ${fileName}:`, error);
-      return `Error extracting content from ${fileName}. Please ensure the file is accessible and properly formatted.`;
-    }
-  }
-
   app.delete("/api/training-data/:id", async (req, res) => {
     try {
       const deleted = await storage.deleteTrainingData(req.params.id);
